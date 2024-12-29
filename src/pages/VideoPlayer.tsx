@@ -5,7 +5,7 @@ const VideoPlayer = () => {
   const { videoId } = useParams();
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto px-2">
       <Link to="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4">
         <ArrowLeft size={20} />
         Back to Home
