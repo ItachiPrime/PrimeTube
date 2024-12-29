@@ -41,7 +41,7 @@ const Navbar = () => {
 
   return (
     <header className="bg-black shadow-sm sticky top-0 z-50">
-      <div className="container mx-auto py-3">
+      <div className="container mx-auto py-3 px-4">
         <div className="flex items-center justify-between w-full">
           <Link to="/" className="flex items-center gap-2">
             <img src="Logo.png" alt="PrimeTube Logo" className="h-7 w-11" />
