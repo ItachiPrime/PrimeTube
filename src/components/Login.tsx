@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { auth } from '../../firebase.config'; 
 import { signInWithEmailAndPassword } from 'firebase/auth'; 
 import { useNavigate } from 'react-router-dom';
+import { getAuth, setPersistence } from "firebase/auth"; 
 
 
 const Login = () => {
@@ -11,6 +12,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
+      await setPersistence(auth, 'session');
       await signInWithEmailAndPassword(auth, email, password);
       navigate('/'); 
     } catch (error) {
