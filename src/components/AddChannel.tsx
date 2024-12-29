@@ -1,48 +1,65 @@
 import React, { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase.config';
 
 interface AddChannelProps {
-  onAddChannel: (channelId: string, name: string) => void;
+  userId: string; // Pass the logged-in user's ID
 }
 
-const AddChannel: React.FC<AddChannelProps> = ({ onAddChannel }) => {
+const AddChannel: React.FC<AddChannelProps> = ({ userId }) => {
   const [channelId, setChannelId] = useState('');
   const [channelName, setChannelName] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (channelId && channelName) {
-      onAddChannel(channelId, channelName);
+  const handleAddChannel = async () => {
+    if (!channelId || !channelName) {
+      alert('Please enter both channel ID and name.');
+      return;
+    }
+
+    setIsAdding(true);
+
+    try {
+      await setDoc(doc(db, `users/${userId}/channels`, channelId), {
+        name: channelName,
+      });
       setChannelId('');
       setChannelName('');
+    } catch (error) {
+      console.error('Failed to add channel:', error);
+    } finally {
+      setIsAdding(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3 p-4 bg-white rounded-lg shadow">
-      <input
-        type="text"
-        value={channelId}
-        onChange={(e) => setChannelId(e.target.value)}
-        placeholder="Channel ID"
-        className="p-2 border rounded"
-      />
-      <input
-        type="text"
-        value={channelName}
-        onChange={(e) => setChannelName(e.target.value)}
-        placeholder="Channel Name"
-        className="p-2 border rounded"
-      />
-      <button
-        type="submit"
-        className="flex items-center justify-center gap-2 bg-red-600 text-white p-2 rounded hover:bg-red-700"
-      >
-        <Plus size={18} />
-        Add Channel
-      </button>
-    </form>
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold">Add a Channel</h2>
+      <div className="flex flex-col gap-2">
+        <input
+          type="text"
+          placeholder="Channel ID"
+          value={channelId}
+          onChange={(e) => setChannelId(e.target.value)}
+          className="p-2 border rounded"
+        />
+        <input
+          type="text"
+          placeholder="Channel Name"
+          value={channelName}
+          onChange={(e) => setChannelName(e.target.value)}
+          className="p-2 border rounded"
+        />
+        <button
+          onClick={handleAddChannel}
+          className="p-2 bg-black text-white rounded hover:bg-gray-800"
+          disabled={isAdding}
+        >
+          {isAdding ? 'Adding...' : 'Add Channel'}
+        </button>
+      </div>
+    </div>
   );
-}
+};
 
 export default AddChannel;
