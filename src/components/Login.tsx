@@ -11,7 +11,8 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await setPersistence(auth, 'session'); 
+      const { user } = await signInWithEmailAndPassword(auth, email, password); 
       navigate('/'); 
     } catch (error) {
       console.error('Login Error:', error);
