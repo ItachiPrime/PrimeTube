@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { auth } from '../../firebase.config'; 
-import { signInWithEmailAndPassword,browserLocalPersistence } from 'firebase/auth'; 
+import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from 'firebase/auth'; 
 import { useNavigate } from 'react-router-dom';
-
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,12 +10,18 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      await setPersistence(auth, browserLocalPersistence);
+      await setPersistence(auth, browserLocalPersistence); // Add this line
       await signInWithEmailAndPassword(auth, email, password); 
       navigate('/'); 
     } catch (error) {
       console.error('Login Error:', error);
-      alert("Invalid Email or Password"); 
+      if (error.code === 'auth/wrong-password') {
+        alert('Invalid password. Please try again.');
+      } else if (error.code === 'auth/user-not-found') {
+        alert('No user found with this email. Please register first.');
+      } else {
+        alert('Error logging in. Please try again.');
+      }
     }
   };
 
@@ -26,7 +31,7 @@ const Login = () => {
         <div>
           <div className="flex justify-center">
             <div className="bg-black p-2 shadow-lg rounded-md">
-            <img src="Logo.png" alt="PrimeTube Logo" className="h-7 w-11" />
+              <img src="Logo.png" alt="PrimeTube Logo" className="h-7 w-11" />
             </div>
           </div>
           <h1 className="mt-6 text-center text-3xl font-bold text-black font-orbitron">PrimeTube</h1>
@@ -63,4 +68,3 @@ const Login = () => {
 };
 
 export default Login;
-
