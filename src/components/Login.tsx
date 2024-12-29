@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { auth } from '../../firebase.config'; 
 import { signInWithEmailAndPassword } from 'firebase/auth'; 
 import { useNavigate } from 'react-router-dom';
-import { getAuth, setPersistence } from "firebase/auth"; 
+import { setPersistence } from "firebase/auth"; 
 
 
 const Login = () => {
