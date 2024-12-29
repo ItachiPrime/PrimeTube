@@ -18,7 +18,7 @@ function App() {
               <RequireAuth> 
                 <div> 
                   <Navbar /> 
-                  <main className="container mx-auto  py-10"> 
+                  <main className="container mx-auto px-2 py-10"> 
                     <Home /> 
                   </main> 
                 </div> 
