@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { auth } from '../../firebase.config'; 
 import { signInWithEmailAndPassword } from 'firebase/auth'; 
 import { useNavigate } from 'react-router-dom';
-import { setPersistence } from 'firebase/auth'; 
 
 
 const Login = () => {
@@ -12,8 +11,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      await setPersistence(auth, 'session'); 
-      const { user } = await signInWithEmailAndPassword(auth, email, password); 
+      await signInWithEmailAndPassword(auth, email, password); 
       navigate('/'); 
     } catch (error) {
       console.error('Login Error:', error);
